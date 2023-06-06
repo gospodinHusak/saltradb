@@ -65,7 +65,7 @@
     padding: 10px 20px !important;
 }
 
-#apply-filters-button {
+.apply-button {
     background-color: #ffffff;
     border-radius: 5px;
     border-color: #3d7eff;

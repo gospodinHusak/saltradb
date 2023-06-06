@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from home_page import home_layout
 from pages.sql_page.layout import sql_layout
 from pages.filtering_page.layout import filtering_layout
+from pages.dashboard.layout import dashboard_layout
 
 
 app = Dash(
@@ -30,6 +31,8 @@ def display_page(pathname):
         return sql_layout
     elif pathname == '/filtering':
         return filtering_layout
+    elif pathname == '/dashboard':
+        return dashboard_layout
     else:
         return 'Ошибка 404: страница не найдена'
 

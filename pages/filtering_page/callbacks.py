@@ -1,25 +1,21 @@
 from app import app
 from dash import Output, Input, State, dcc, callback_context
-from dash.dash_table import DataTable
-import sqlite3
 import pandas as pd
-from pages.filtering_page.table import full_df
-from pages.filtering_page.config import col_rules, col_names
-
+from table import full_df, col_rules, col_names
 
 
 filter_data_states = []
 for col in col_rules.keys():
     if col != 'date':
-        filter_data_states.append(State(col, 'value'))
+        filter_data_states.append(State('filtering-' + col, 'value'))
     else:
-        filter_data_states.append(State(col + '-min-input', 'value'))
-        filter_data_states.append(State(col + '-max-input', 'value'))
+        filter_data_states.append(State('filtering-' + col + '-min-input', 'value'))
+        filter_data_states.append(State('filtering-' + col + '-max-input', 'value'))
 
 
 @app.callback(
     Output('filtering-table', 'data'),
-    Input('apply-filters-button', 'n_clicks'),
+    Input('filtering-apply-filters-button', 'n_clicks'),
     filter_data_states,
     prevent_initial_call=True
 )
@@ -27,7 +23,8 @@ def filter_data(*args):
     ctx = callback_context
     query_parts = []
     for k,v in ctx.states.items():
-        col = k.split('.')[0]
+        cid_parts = k.split('.')[0].split('-')
+        col = '-'.join([p for p in cid_parts if p != 'filtering'])
         if col in col_rules.keys():
             if col_rules[col] == 'unique':
                 query_parts.append(f'{col_names[col]} in {v}')
@@ -137,8 +134,8 @@ def intervals_sync(component_id):
 
 for k, v in col_rules.items():
     if v == 'unique':
-        checklists_sync(k)
+        checklists_sync(f'filtering-{k}')
     elif v == 'minmax' and k != 'date':
-        intervals_sync(k)
+        intervals_sync(f'filtering-{k}')
         
 checklists_sync('columns-list-checklist')

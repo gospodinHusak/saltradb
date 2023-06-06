@@ -1,7 +1,7 @@
 from app import app, display_page
 import pages.sql_page.callbacks 
 import pages.filtering_page.callbacks
-
+import pages.dashboard.callbacks
 
 server = app.server
 

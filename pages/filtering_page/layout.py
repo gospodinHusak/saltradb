@@ -4,45 +4,13 @@ from dash_iconify import DashIconify
 import pandas as pd
 import plotly.express as px
 import dash_ace
-import filter_funcs as ff
-from pages.filtering_page.table import full_df
-from pages.filtering_page.config import col_names, col_rules
+from filter_funcs import create_components
+from table import full_df, col_names, col_rules
 
 
 
-
-
-def get_column_minmax(df, column):
-    return df[column].sort_values().agg(['min', 'max']).tolist()
-
-def get_column_unique(df, column):
-    return df[column].unique().tolist()
-
-
-funcs = {
-    'minmax': get_column_minmax,
-    'unique': get_column_unique
-}
-
-
-filter_config = {}
-for k, v in col_rules.items():
-    filter_config[k] = funcs[v](full_df, k)
-
-
-components = []
-for k, v in col_rules.items():
-    if v == 'unique':
-        components.append(ff.checkbox(name=col_names[k], col=k, values=filter_config[k]))
-    elif v == 'minmax':
-        if k == 'date':
-            components.append(ff.date_filter(name=col_names[k], col=k, values=filter_config[k]))
-        else: 
-            components.append(ff.interval(name=col_names[k], col=k, values=filter_config[k]))
-
-
-
-full_df.rename(columns=col_names, inplace=True)
+components = create_components(rules=col_rules, names=col_names, df=full_df, page='filtering')
+df = full_df.rename(columns=col_names)
 
 navbar = html.Nav(
     html.Div(
@@ -82,7 +50,7 @@ filtering_layout = html.Div(
             id='filterpanel-container',
             children=[
                 dbc.Accordion(components, flush=True),
-                html.Button('Применить', id='apply-filters-button')
+                html.Button('Применить', id='filtering-apply-filters-button')
             ],
             className='collapsed'
         ),
@@ -99,8 +67,8 @@ filtering_layout = html.Div(
                 ),
                 dbc.Checklist(
                     id='columns-list-checklist',
-                    options=[{'label': i, 'value': i} for i in full_df.columns],
-                    value=full_df.columns,
+                    options=[{'label': i, 'value': i} for i in df.columns],
+                    value=df.columns,
                     persistence=True,
                     persistence_type="session",
                     class_name='filter'
@@ -120,11 +88,7 @@ filtering_layout = html.Div(
                         html.Button(
                             id='columns-list-button', children=DashIconify(icon='material-symbols:event-list', width=30), n_clicks=0,
                             className='little-button'
-                        ),
-                        html.Button(
-                            id='filtering-plot', children=DashIconify(icon='carbon:qq-plot', width=30), n_clicks=0,
-                            className='little-button'
-                        ),
+                        )
                     ],
                     vertical=True, 
                     class_name='btn-grp-aaa'
@@ -132,8 +96,8 @@ filtering_layout = html.Div(
                 html.Div(
                     [
                         dash_table.DataTable(
-                            columns=[{"name": i, "id": i} for i in full_df.columns],
-                            data=full_df.to_dict('records'), 
+                            columns=[{"name": i, "id": i} for i in df.columns],
+                            data=df.to_dict('records'), 
                             id='filtering-table',
                             cell_selectable=False,
                         )
