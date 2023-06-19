@@ -51,9 +51,9 @@ dashboard_layout = html.Div(
         ),
         dbc.Tabs(
             [
-                dbc.Tab(id='tab1', children=[dcc.Graph(id='graph1')], label='Tab1'),
-                dbc.Tab(id='tab2', children=[dcc.Graph(id='graph2')], label='Tab2'),
-                dbc.Tab(id='tab3', children=[dcc.Graph(id='graph3')], label='Tab3'),
+                dbc.Tab(id='tab1', children=[dcc.Graph(id='graph1')], label='Количество сделок по рынкам'),
+                dbc.Tab(id='tab2', children=[dcc.Graph(id='graph2')], label='Суммарная стоимость сделок по рынкам'),
+                dbc.Tab(id='tab3', children=[dcc.Graph(id='graph3')], label='Динамика среднегодовых цен'),
             ],
             id='tabs'
         )
