@@ -11,6 +11,13 @@ components = create_components(rules=col_rules, names=col_names, df=full_df, pag
 navbar = html.Nav(
     html.Div(
         [
+            html.Button(
+                html.A(
+                    DashIconify(icon='octicon:home-24', width=30), 
+                    href='/'
+                ), 
+                className='nav-button'
+            ),
             html.H3('Визуализации', className='brand'),
             html.Div(
                 dbc.ButtonGroup(
@@ -38,7 +45,7 @@ navbar = html.Nav(
     className='custom-navbar'
 )    
 
-dashboard_layout = html.Div(
+layout = html.Div(
     [
         navbar,
         html.Div(

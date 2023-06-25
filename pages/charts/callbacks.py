@@ -91,9 +91,7 @@ def update_graphs(*args):
     df['year'] = df['date'].apply(new_col)
     
     years = [df.year.min() + i for i in range(df.year.max() - df.year.min() + 1)]
-    print(years)
     seasons = [f'{y}/{y+1}' for y in years]
-    print(seasons)
     markets = sorted(df.market.unique())
     avg_prices = df.groupby(['year', 'market'])['price'].mean().reset_index().sort_values(by=['year','market'])
     avg_prices['price'] = round(avg_prices['price'], 2)
@@ -121,7 +119,4 @@ def update_graphs(*args):
         )
     )
     
-    
-    
-    # количество сделок на представленных рынках
     return [fig1, fig2, fig3]

@@ -8,8 +8,10 @@
     width: 100%;
     position: fixed;
     top: 0;
-    padding: 0 .5rem;
+    padding: 0 5px 0 0;
     z-index: 1020;
+    background-color: white;
+    border-bottom: 1px solid;
 }
 
 .nav-panel-buttons {
@@ -46,3 +48,11 @@
     margin-left:auto;
     justify-content: flex-start;
   }
+
+p {
+    text-align: justify;
+}
+
+h3 {
+    text-align: center;
+}

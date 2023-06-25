@@ -2,9 +2,9 @@ from dash import Dash, html, dcc, Output, Input
 import dash_bootstrap_components as dbc
 
 from home_page import home_layout
-from pages.sql_page.layout import sql_layout
-from pages.filtering_page.layout import filtering_layout
-from pages.dashboard.layout import dashboard_layout
+from pages.sql_editor.layout import layout as sql_editor_layout
+from pages.table.layout import layout as table_layout
+from pages.charts.layout import layout as charts_layout
 
 
 app = Dash(
@@ -27,12 +27,12 @@ app.layout = html.Div(
 def display_page(pathname):
     if pathname == '/':
         return home_layout
-    elif pathname == '/sql':
-        return sql_layout
-    elif pathname == '/filtering':
-        return filtering_layout
-    elif pathname == '/dashboard':
-        return dashboard_layout
+    elif pathname == '/sql_editor':
+        return sql_editor_layout
+    elif pathname == '/table':
+        return table_layout
+    elif pathname == '/charts':
+        return charts_layout
     else:
         return 'Ошибка 404: страница не найдена'
 

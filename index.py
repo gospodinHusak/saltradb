@@ -1,7 +1,7 @@
 from app import app, display_page
-import pages.sql_page.callbacks 
-import pages.filtering_page.callbacks
-import pages.dashboard.callbacks
+import pages.sql_editor.callbacks 
+import pages.table.callbacks
+import pages.charts.callbacks
 
 server = app.server
 
