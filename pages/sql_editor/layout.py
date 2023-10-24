@@ -55,7 +55,7 @@ sql_textarea = html.Div(
     children=[
         DashAceEditor(
             id='sql-query-input',
-            value='SELECT * FROM Sales',
+            value='''/* В данном поле можно написать запрос к БД. */''',
             theme='github',
             mode='sql',
             enableBasicAutocompletion=True,
@@ -77,10 +77,10 @@ db_schemas = html.Div(
             children=[
                 html.P('Таблицы'),
                 dcc.RadioItems(
-                id='info-radio',
-                options=[{'label': i, 'value': i} for i in tables],
-                value=tables[0],
-                labelStyle={'display': 'block'},
+                    id='info-radio',
+                    options=[{'label': i, 'value': i} for i in tables],
+                    value=tables[0],
+                    labelStyle={'display': 'block'},
                 ),
             ]
         ),
@@ -107,7 +107,7 @@ db_schemas = html.Div(
 main_content = html.Div(
     [
         html.Div(id='sql-editor-container', children=[sql_textarea, db_schemas]),
-        html.Div(id='sql-data-container'),
+        html.Div(id='sql-query-output'),
     ],
     className='content'
 )

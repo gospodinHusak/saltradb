@@ -1,12 +1,8 @@
-from dash import Dash, dcc, html, dash_table, Input, Output, State
+from dash import dcc, html, dash_table
 import dash_bootstrap_components as dbc
 from dash_iconify import DashIconify
-import pandas as pd
-import plotly.express as px
-import dash_ace
 from filter_funcs import create_components
 from table import full_df, col_names, col_rules
-
 
 
 components = create_components(rules=col_rules, names=col_names, df=full_df, page='filtering')

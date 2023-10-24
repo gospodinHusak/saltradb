@@ -57,12 +57,12 @@ layout = html.Div(
             className='collapsed'
         ),
         dbc.Tabs(
-            [
+            id='tabs',
+            children=[
                 dbc.Tab(id='tab1', children=[dcc.Graph(id='graph1')], label='Количество сделок по рынкам'),
                 dbc.Tab(id='tab2', children=[dcc.Graph(id='graph2')], label='Суммарная стоимость сделок по рынкам'),
                 dbc.Tab(id='tab3', children=[dcc.Graph(id='graph3')], label='Динамика среднегодовых цен'),
-            ],
-            id='tabs'
+            ]
         )
     ]
 )

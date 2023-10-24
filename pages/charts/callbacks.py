@@ -1,9 +1,9 @@
 from app import app
-from dash import Output, Input, State, dcc, callback_context
-import pandas as pd
+from dash import Output, Input, State, callback_context
 from table import full_df, col_rules, col_names
 import plotly.express as px
 import plotly.graph_objects as go
+
 
 filter_data_states = []
 for col in col_rules.keys():
