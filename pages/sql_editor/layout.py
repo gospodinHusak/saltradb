@@ -68,45 +68,51 @@ sql_textarea = html.Div(
 )
 
 
-tables = get_tables()
-db_schemas = html.Div(
-    id='table-schemas',
-    children=[
-        html.Div(
-            id='filter-column', 
-            children=[
-                html.P('Таблицы'),
-                dcc.RadioItems(
-                    id='info-radio',
-                    options=[{'label': i, 'value': i} for i in tables],
-                    value=tables[0],
-                    labelStyle={'display': 'block'},
-                ),
-            ]
-        ),
-        html.Div(
-            className='table-column', 
-            children=[
-                DataTable(
-                    id='info-table',
-                    columns=[
-                        {'name': 'Name', 'id': 'name'},
-                        {'name': 'Type', 'id': 'type'},
-                        {'name': 'Nullable', 'id': 'nullable'},
-                        {'name': 'Default Value', 'id': 'default_value'},
-                        {'name': 'Primary Key', 'id': 'primary_key'}
-                    ],
-                    cell_selectable=False,
-                    style_table={'width': '100%', 'height': 'calc(60vh - 60px)'}
-                ),
-            ]
-        ),
-    ],
-)
+# tables = get_tables()
+# db_schemas = html.Div(
+#     id='table-schemas',
+#     children=[
+#         html.Div(
+#             id='filter-column', 
+#             children=[
+#                 html.P('Таблицы'),
+#                 dcc.RadioItems(
+#                     id='info-radio',
+#                     options=[{'label': i, 'value': i} for i in tables],
+#                     value=tables[0],
+#                     labelStyle={'display': 'block'},
+#                 ),
+#             ]
+#         ),
+#         html.Div(
+#             className='table-column', 
+#             children=[
+#                 DataTable(
+#                     id='info-table',
+#                     columns=[
+#                         {'name': 'Name', 'id': 'name'},
+#                         {'name': 'Type', 'id': 'type'},
+#                         {'name': 'Nullable', 'id': 'nullable'},
+#                         {'name': 'Default Value', 'id': 'default_value'},
+#                         {'name': 'Primary Key', 'id': 'primary_key'}
+#                     ],
+#                     cell_selectable=False,
+#                     style_table={'width': '100%', 'height': 'calc(60vh - 60px)'}
+#                 ),
+#             ]
+#         ),
+#     ],
+# )
 
 main_content = html.Div(
     [
-        html.Div(id='sql-editor-container', children=[sql_textarea, db_schemas]),
+        html.Div(
+            id='sql-editor-container', 
+            children=[
+                sql_textarea, 
+                # db_schemas
+            ]
+        ),
         html.Div(id='sql-query-output'),
     ],
     className='content'
