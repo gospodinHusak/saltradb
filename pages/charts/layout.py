@@ -1,69 +1,99 @@
 from dash import dcc, html
 import dash_bootstrap_components as dbc
 from dash_iconify import DashIconify
-from filter_funcs import create_components
-from table import full_df, col_names, col_rules
+from common_components import card
 
-
-
-components = create_components(rules=col_rules, names=col_names, df=full_df, page='dashboard')
-
-navbar = html.Nav(
-    html.Div(
-        [
-            html.Button(
-                html.A(
-                    DashIconify(icon='octicon:home-24', width=30), 
-                    href='/'
-                ), 
-                className='nav-button'
-            ),
-            html.H3('Визуализации', className='brand'),
-            html.Div(
-                dbc.ButtonGroup(
+cards_col = html.Div(
+    id='filters-col',
+    children=[
+        card(
+            title="Фильтры", 
+            index='filters', 
+            is_open=True,
+            is_closable=False
+        ),
+        dbc.Button(
+            children=[
+                html.Span(
                     [
-                        html.Button(
-                            DashIconify(icon='teenyicons:info-small-solid', width=30),
-                            id='page-overview-toggle-btn',
-                            n_clicks=0,
-                            className='nav-button',
+                        DashIconify(
+                            icon="material-symbols-light:play-arrow",
+                            width=30, 
+                            style={'padding':'0','display':'inline-block'}
                         ),
-                        html.Button(
-                            DashIconify(icon='system-uicons:filtering', width=30),
-                            id='filterpanel-toggle-btn',
-                            n_clicks=0,
-                            className='nav-button'
+                        html.Div(
+                            'Применить фильтры', 
+                            style={
+                                'display':'inline-block',
+                                'height':'24px', 
+                                'line-height':'24px'
+                            }
                         )
-                    ]
-                ),
-                className='nav-panel-buttons'
-            )
-        ],
-        className='d-flex'
-    ),
-    id='dashboard-navbar',
-    className='custom-navbar'
-)    
+                    ], 
+                    style={'display':'inline-block'}
+                )
+            ], 
+            id='apply-filters-button',
+            n_clicks=0,
+            color='success',
+            size='md',
+            class_name='panel-button',
+            style={
+                'margin-top': '5px',
+                'border-color': 'rgba(93,208,185, .5)',
+                'width': '400px'
+            }
+        )
+    ],
+    style={
+        'width': '400px',
+        'height':'calc(100vh - 40px)',
+        'overflow-y': 'auto'
+    }
+)
 
-layout = html.Div(
+navbar = dbc.NavbarSimple(
+    children=[
+        dbc.NavItem(dbc.NavLink("На главную", href="/")),
+        dbc.DropdownMenu(
+            children=[
+                dbc.DropdownMenuItem("More pages", header=True),
+                dbc.DropdownMenuItem("Page 2", href="#"),
+                dbc.DropdownMenuItem("Page 3", href="#"),
+            ],
+            nav=True,
+            in_navbar=True,
+            label="Другие страницы",
+        )
+    ],
+    brand="Визуализации",
+    color="primary",
+    dark=True
+)
+
+
+layout = dbc.Container(
     [
+        dcc.Store(id='filters-store'),
+        dcc.Store(id='charts-config-store'),
+        dcc.Store(id='where-statement-store'),
         navbar,
         html.Div(
-            id='dashboard-filterpanel-container',
-            children=[
-                dbc.Accordion(components, flush=True),
-                html.Button('Применить', id='dashboard-apply-filters-button', className='apply-button')
+            [
+                cards_col,
+                html.Div(
+                    id='chart-container',
+                    style={'flex': '1'}
+                )
             ],
-            className='collapsed'
-        ),
-        dbc.Tabs(
-            id='tabs',
-            children=[
-                dbc.Tab(id='tab1', children=[dcc.Graph(id='graph1')], label='Количество сделок по рынкам'),
-                dbc.Tab(id='tab2', children=[dcc.Graph(id='graph2')], label='Суммарная стоимость сделок по рынкам'),
-                dbc.Tab(id='tab3', children=[dcc.Graph(id='graph3')], label='Динамика среднегодовых цен'),
-            ]
+            style={
+                'display': 'flex',
+                'height':'calc(100vh - 85px)'
+            },
         )
-    ]
+        
+    ],
+    class_name='page-layout',
+    fluid=True
 )
 

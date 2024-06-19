@@ -1,12 +1,11 @@
 import psycopg2
 import pandas as pd
+import os
 from dotenv import load_dotenv
 load_dotenv()
 
-import os
 
-
-def get_data(query): 
+def get_conn():
     conn = psycopg2.connect(
         host=os.getenv("HOST"), 
         port=os.getenv("POSRT"), 
@@ -14,7 +13,11 @@ def get_data(query):
         user=os.getenv("USER"), 
         password=os.getenv("PASSWORD")
     )
-    cur = conn.cursor()
+    return conn, conn.cursor()
+
+
+def get_data(query): 
+    conn, cur = get_conn()
 
     cur.execute(query)
 

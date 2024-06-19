@@ -7,33 +7,19 @@
 
 #filtering-table-container {
     flex-grow: 1;
+    max-height: calc(100vh - 100px);
     overflow: auto;
-}
-
-#filterpanel-container {
-    position: fixed;
-    top: 46px;
-    bottom: 0;
-    width: calc(100% - 50px);
-    background-color: transparent;
-    backdrop-filter: blur(8px);
-    height: calc(100vh - 46px);
-    z-index: 1;
-    transition: all 1s;
-    padding: 0.5rem 1rem;
-}
-
-#filterpanel-container.toggled {
-    right: 0;
-}
-
-#filterpanel-container.collapsed {
-    right: calc(calc(100% - 50px) * -1);
+    scrollbar-color: rgb(35, 49, 63) rgba(255, 255, 255, 0);
 }
 
 .accordion {
-    height: calc(100vh - 133px - 16px);
+    height: auto;
     overflow-y: auto;
+    scrollbar-color: rgb(35, 49, 63) rgba(255, 255, 255, 0);
+}
+
+#cols-config {
+    border: none;
 }
 
 #columns-list-div {
@@ -47,6 +33,32 @@
     z-index: 1;
 }
 
+.accordion-button {
+    box-shadow: none !important;
+    background-color: rgb(236, 240, 241) !important;
+    padding: 6px;
+}
+
+.accordion-body {
+    padding: 6px;
+    max-height: 30vh;
+    overflow-y:auto;
+}
+
+.accordion-collapse {
+    background-color: rgb(236, 240, 241) !important;
+    max-height: 30vh;
+}
+
+
+.eye-button {
+    color: rgb(35, 49, 63)
+}
+
+.eye-button:hover {
+    color: rgba(35, 49, 63, 0.5);
+    border-color: rgba(35, 49, 63, 0.5);
+}
 
 .all-value-option {
     font-weight: bold;
@@ -57,22 +69,144 @@
 }
 
 .interval-input {
-    width: 15%;
+    width: 50%;
 }
 
 .interval-slider {
     width: 70%;
     padding: 10px 20px !important;
+    color: rgb(35, 49, 63);
 }
 
-.apply-button {
-    background-color: #ffffff;
-    border-radius: 5px;
-    border-color: #3d7eff;
-    justify-self: center;
-    height: 50px;
+.rc-slider-handle {
+    border-color: rgb(35, 49, 63);
+}
+
+.rc-slider-handle-click-focused {
+    border-color: rgb(36, 51, 66) !important;
+}
+
+.rc-slider-handle-dragging {
+    border-color: rgb(36, 51, 66) !important;
+    box-shadow: rgba(36, 51, 66, 0.5) 0px 0px 0px 5px !important;
+}
+
+.rc-slider-handle:hover {
+    border-color: rgb(36, 51, 66);
+}
+
+
+.rc-slider-track {
+    background-color: rgb(35, 49, 63);
+}
+
+
+.required .Select-control {
+    border-color: rgb(231, 76, 60) !important;
+}
+
+.Select-control {
+    box-shadow: none !important;
+    border-color: rgb(36, 51, 66) !important;
+}
+
+.card {
+    border-radius: 0px;
+}
+
+.navbar .container {
+    margin: 0;
+    max-width: 100vw !important;
+}
+
+.card-body {
+    padding: 10px;
+}
+
+.config-panel-hidden {
+    display:none !important;
+}
+
+.table {
+    border-collapse: separate !important;
+}
+
+th {
+    resize:horizontal;
+    overflow:auto
+}
+
+#cards-col {
+    scrollbar-color :rgb(35, 49, 63) rgba(255, 255, 255, 0);
+    background-color: rgb(236, 240, 241);
+}
+
+body {
+    font-family: Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+div#loading-spinner {
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    top: 85px;
+    height: calc(100vh - 100px);
+    z-index: 1;
+    padding: auto;
+    backdrop-filter: blur(2px);
+}
+
+div#loading-spinner.config-visible {
+    left: 400px;
+    width: calc(100vw - 400px); 
+}
+
+div#loading-spinner.config-hidden {
+    left: 0px;
+    width: 100vw; 
+}
+
+.panel-button {
+    text-align: center;
+    border-radius: 0px;
+    border-bottom-width: 3px;
+    border-top-width: 0px;
+}
+
+#run-query-button {
+    margin-left: 2px;
+}
+
+.navbar {
+    padding: 0px !important;
     width: 100%;
-    letter-spacing: 2px;
-    word-spacing: 5px;
-    font-size: 22px;
+}
+
+.popover {
+    border-radius: 0px;
+}
+
+#file-name-input {
+    width: 100%;
+}
+
+.btn-group {
+    width: 100%;
+}
+
+.btn-group .form-check {
+    padding: 0px;
+}
+
+.form-check:last-child {
+    margin-left: auto;
+}
+
+.popover-header {
+    border-radius: 0px;
+}
+
+.popover-arrow {
+    border-color: rgb(236, 240, 241) !important;
+    color: rgb(236, 240, 241) !important;
 }
