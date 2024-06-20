@@ -452,9 +452,10 @@ def produce_table(*args):
 
     order_by_columns_str = ''
     if 'orders-dropdown' in modified_states.keys():
+        direction = 'orders-direction-dropdown'
         order_by_columns_str = ', '.join(
             [
-                f'"{value}" {modified_states['orders-direction-dropdown'][key]}'
+                f'"{value}" {modified_states[direction][key]}'
                 for key, value in modified_states['orders-dropdown'].items()
                 if modified_states['orders-dropdown'][key] is not None
             ]
