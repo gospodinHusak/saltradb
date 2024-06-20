@@ -454,8 +454,8 @@ def produce_table(*args):
     if 'orders-dropdown' in modified_states.keys():
         order_by_columns_str = ', '.join(
             [
-                f'"{modified_states['orders-dropdown'][key]}" {modified_states['orders-direction-dropdown'][key]}'
-                for key in modified_states['orders-dropdown'].keys()
+                f'"{value}" {modified_states['orders-direction-dropdown'][key]}'
+                for key, value in modified_states['orders-dropdown'].items()
                 if modified_states['orders-dropdown'][key] is not None
             ]
         )
@@ -592,3 +592,6 @@ def download_data(excel_button, csv_button, data, fname):
         with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
             df.to_excel(writer, sheet_name='Sheet_name_1', index=False)
         return dcc.send_bytes(output.getvalue(), f'{fname}.xlsx')
+
+
+
