@@ -6,7 +6,14 @@ from dotenv import load_dotenv
 load_dotenv()
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG)
+logging.basicConfig(filename='example.log', encoding='utf-8')
+
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setLevel(logging.INFO)
+logger.addHandler(handler)
+
+
 
 def get_conn():
     try:
@@ -17,9 +24,18 @@ def get_conn():
             user=os.getenv("USER"), 
             password=os.getenv("PASSWORD")
         )
-    except:
-        logger.error(Exception)
-    return conn, conn.cursor()
+
+        return conn, conn.cursor()
+    
+    except psycopg2.errors.ConnectionException as e:
+        logger.error(e)
+        raise e
+    
+    except psycopg2.errors.ConnectionFailure as e2:
+        logger.error(e2)
+        raise e2
+    
+    
 
 
 def get_data(query): 
