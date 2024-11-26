@@ -176,42 +176,44 @@ def reset_orders(value):
     )
 
 
-def transform_rows(card_id, func, method_dropdown=False, use_cols=True):
+def transform_rows(card_id, func, store_id, method_dropdown=False):
     @app.callback(
         Output({'type':'container', 'index': card_id}, 'children'),
         Input(f'add-{card_id}-button', 'n_clicks'),
         Input({'type': f'delete-{card_id}-row-button', 'index': ALL}, 'n_clicks'),
         State({'type':'container', 'index': f'{card_id}'}, 'children'),
-        State('view-columns-store', 'data'),
+        State(store_id, 'data'),
         prevent_initial_call=True
     )
     def transform_grouping_attributes(*args):
         ctx = callback_context
-        container = ctx.states['{"index":"' + card_id +'","type":"container"}.children']
+        container = ctx.states['{"index":"' + card_id + '","type":"container"}.children']
 
-        ids = [row['props']['id']['index'] for row in container]
+        ids = [row['props']['id']['index'] for row in container if 'id' in row['props']]
         column_values = [row['props']['children'][0]['props']['value'] for row in container]
         if method_dropdown:
             method_values = [row['props']['children'][1]['props']['value'] for row in container]
 
         if ctx.triggered_id == f'add-{card_id}-button':
-            if use_cols:
-                cols = ctx.states['view-columns-store.data']
 
             current_rows = []
             for i in range(len(container)):
-                args = dict(num=ids[i], column_value=column_values[i])
+                args = dict(
+                    num=ids[i], 
+                    column_value=column_values[i],
+                    cols=ctx.states[f'{store_id}.data']
+                )
                 
                 if method_dropdown:
                     args['method_value'] = method_values[i]
-                if use_cols:
-                    args['cols'] = cols
                 
                 current_rows.append(func(**args))
 
-            args = dict(num=ctx.inputs[f'add-{card_id}-button.n_clicks'])
-            if use_cols:
-                args['cols'] = cols
+            args = dict(
+                num=ctx.inputs[f'add-{card_id}-button.n_clicks'],
+                cols=ctx.states[f'{store_id}.data']
+            )
+
             new_row = [
                 func(**args)
             ]
@@ -227,75 +229,107 @@ def transform_rows(card_id, func, method_dropdown=False, use_cols=True):
 
 
 transforming_cards = {
-        'grouping-attributes': {
-            'func': grouping_attr_row, 
-            'method_dropdown': False,
-            'use_cols': True
-        }, 
-        'fields': {
-            'func': field_row, 
-            'method_dropdown': False,
-            'use_cols': True
-        }, 
-        'metrics': {
-            'func': metric_row, 
-            'method_dropdown': True,
-            'use_cols': True
-        }, 
-        'orders': {
-            'func': order_row, 
-            'method_dropdown': True,
-            'use_cols': False
-        }
-    }    
+    'grouping-attributes': {
+        'func': grouping_attr_row, 
+        'method_dropdown': False,
+        'store_id': 'view-columns-store'
+    }, 
+    'fields': {
+        'func': field_row, 
+        'method_dropdown': False,
+        'store_id': 'view-columns-store'
+    }, 
+    'metrics': {
+        'func': metric_row, 
+        'method_dropdown': True,
+        'store_id': 'view-columns-store'
+    }, 
+    'orders': {
+        'func': order_row, 
+        'method_dropdown': True,
+        'store_id': 'orders-options-store'
+    }
+}    
 
 for card_id, config in transforming_cards.items():
     transform_rows(
         card_id=card_id,
         func=config['func'],
         method_dropdown=config['method_dropdown'],
-        use_cols=config['use_cols']
+        store_id=config['store_id']
     )           
     
 @app.callback(
-    Output({'type': 'orders-dropdown', 'index': ALL}, 'options'),
+    Output('orders-options-store', 'data'),
     Input({'type': 'grouping-attributes-dropdown', 'index': ALL}, 'value'),
     Input({'type': 'metrics-dropdown', 'index': ALL}, 'value'),
     Input({'type': 'fields-dropdown', 'index': ALL}, 'value'),
+    Input({'type': 'metrics-aggtype-dropdown', 'index': ALL}, 'value'),
     State('query-type', 'value'),
     State({'type': 'grouping-attributes-dropdown', 'index': ALL}, 'value'),
     State({'type': 'metrics-dropdown', 'index': ALL}, 'value'),
+    State({'type': 'metrics-aggtype-dropdown', 'index': ALL}, 'value'),
     State({'type': 'fields-dropdown', 'index': ALL}, 'value'),
-    State({'type': 'orders-dropdown', 'index': ALL}, 'value'),
     prevent_initial_call=True
 )
-def update_orders(*args):
-    ctx = callback_context
-    states = ctx.states
+def store_orders_options(*args):
+    states = callback_context.states
+
     qt = states['query-type.value']
     del states['query-type.value']
 
-    active_vals = []
-    ordering_attrs = len([key for key in states.keys() if 'orders-dropdown' in key])
-
+    grp_attrs, fields, metrics, metrics_agg = [], [], {}, {}
 
     for key, value in states.items():
-        if qt == 'raw':
-            if 'fields-dropdown' in key and value:
-                active_vals.append(value)
-        else:
-            if ('grouping-attributes-dropdown' in key or 'metrics-dropdown' in key) and value:
-                active_vals.append(value)
+        index = int(re.search(r'"index":(\d+)', key).group(1))
+        if value:
+            if 'fields-dropdown' in key:
+                fields.append(value)
+            elif 'grouping-attributes-dropdown' in key:
+                grp_attrs.append(value)
+            elif 'metrics-dropdown' in key:
+                metrics[index] = value
+            else:
+                metrics_agg[index] = value
 
-    active_vals = list(set(active_vals))
+    if qt == 'raw':
+        active_vals = list(set(fields))
+    else:
+        metrics_modified = []
+        for index in metrics.keys():
+            if index in metrics_agg.keys():
+                metrics_modified.append(f'{metrics[index]} ({metrics_agg[index]})')
+            else:
+                metrics_modified.append(metrics[index])
+        active_vals = list(set(grp_attrs + metrics_modified))
+
+    return sorted(active_vals)
+
+@app.callback(
+    Output({'type': 'orders-dropdown', 'index': ALL}, 'options'),
+    Input('orders-options-store', 'data'),
+    State({'type': 'orders-dropdown', 'index': ALL}, 'value'),
+    prevent_initial_call=True
+)
+def update_order_options(*args):
+    options = callback_context.inputs['orders-options-store.data']
+
+    ord_attrs_len = len(
+        [
+            key 
+            for key in callback_context.states.keys() 
+            if 'orders-dropdown' in key
+        ]
+    )
 
     return [
         [
-            {'label': val,'value': val} 
-            for val in active_vals
-        ] 
-        for i in range(ordering_attrs)
+            {'label': i, 'value': i}
+            for i in options
+        ]
+        for attr in range(ord_attrs_len)
     ]
+
 
 @app.callback(
     Output({'type': 'orders-direction-dropdown','index': MATCH}, 'value'),
@@ -453,6 +487,9 @@ def produce_table(*args):
     order_by_columns_str = ''
     if 'orders-dropdown' in modified_states.keys():
         direction = 'orders-direction-dropdown'
+        for key, value in modified_states['orders-dropdown'].items():
+            print(key)
+            print(value)
         order_by_columns_str = ', '.join(
             [
                 f'"{value}" {modified_states[direction][key]}'
@@ -460,8 +497,11 @@ def produce_table(*args):
                 if modified_states['orders-dropdown'][key] is not None
             ]
         )
+        print(order_by_columns_str)
 
     order_by_statement = f'ORDER BY {order_by_columns_str}' if len(order_by_columns_str) > 0 else ''
+
+
 
     if query_type == 'raw':
         select_columns_str = ', '.join(
@@ -489,8 +529,6 @@ def produce_table(*args):
             col = modified_states['metrics-dropdown'][key]
             metric_agg = f'{agg}("{col}")'
             metric_name = f'{col} ({agg})'
-            if col in order_by_statement:
-                order_by_statement = order_by_statement.replace(col, metric_name)
             metrics_columns.append(f'{metric_agg} as "{metric_name}"')
 
         metrics_columns_str = ', '.join(metrics_columns)
@@ -524,11 +562,12 @@ def produce_table(*args):
             {group_by_statement}
             {order_by_statement}
         '''
-
+    print(last_query)
+    print(query)
     if query == last_query:
         raise exceptions.PreventUpdate
     
-    print(query)
+    
 
     df = get_data(query)
 

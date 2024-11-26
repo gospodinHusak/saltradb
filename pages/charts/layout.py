@@ -55,13 +55,14 @@ cards_col = html.Div(
 navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("На главную", href="/")),
+        html.Div(style={'borderLeft': '1px solid gray', 'height': '20px', 'margin': '10px 10px'}),
         dbc.DropdownMenu(
             children=[
-                dbc.DropdownMenuItem("More pages", header=True),
-                dbc.DropdownMenuItem("Page 2", href="#"),
-                dbc.DropdownMenuItem("Page 3", href="#"),
+                dbc.DropdownMenuItem("О базе данных", href="/about-db"),
+                dbc.DropdownMenuItem("Контруктор таблиц", href="/table-constructor"),
             ],
             nav=True,
+            align_end=True,
             in_navbar=True,
             label="Другие страницы",
         )

@@ -3,10 +3,7 @@ import dash_bootstrap_components as dbc
 from dash_iconify import DashIconify
 import os
 
-OVERVIEW_TEXT = '''
-    Проект представляет собой веб-сервис для взаимодействия с базой данных, в которой 
-    собраны сведения о торговле солью в XVII веке на Русском Севере. 
-'''
+OVERVIEW_TEXT = ''''''
 
 def nav_card(id, title):
     return html.Div(
@@ -28,10 +25,11 @@ cards_config={
 navbar = dbc.NavbarSimple(
     id='home-nav',
     children=[
+        dbc.NavItem(dbc.NavLink("О базе данных", href="/about-db")),
+        html.Div(style={'borderLeft': '1px solid gray', 'height': '20px', 'margin': '10px 10px'}),
         dbc.NavItem(dbc.NavLink("Конструктор таблиц", href="/table-constructor")),
+        html.Div(style={'borderLeft': '1px solid gray', 'height': '20px', 'margin': '10px 10px'}),
         dbc.NavItem(dbc.NavLink("Визуализации", href="/charts")),
-        dbc.NavItem(dbc.NavLink("О базе данных", href="/about-database", disabled=True)),
-        dbc.NavItem(dbc.NavLink("Методология", href="/methodology", disabled=True))
     ],
     brand="Соляной рынок Русского Севера в XVII в.",
     color="primary",

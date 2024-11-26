@@ -81,8 +81,8 @@ def interval_sync_callback(min_input, max_input, slider, min_value, max_value):
 
 @app.callback(
     Output('where-statement-store', 'data'),
-    Input({'type': 'interval-min-input', 'index': ALL}, 'value'),
-    Input({'type': 'interval-max-input', 'index': ALL}, 'value'),
+    Input({'type': 'interval-slider', 'index': ALL}, 'value'),
+    Input({'type': 'checklist-exclude', 'index': ALL,}, 'value'),
     Input({'type': 'checklist', 'index': ALL}, 'value'),
     Input({'type': 'checklist-all-value', 'index': ALL}, 'value'),
     Input({'type': 'min-input', 'index': ALL}, 'value'),
@@ -132,11 +132,13 @@ def where_statement_store(*args):
 
                 filters.append(filter_statement)
 
-            elif filter_type == 'interval-min-input':
-                filters.append(f'{column} >= {filter_value}')
+            elif filter_type == 'interval-slider':
+                statement = f'{column} BETWEEN {filter_value[0]} AND {filter_value[1]}'
 
-            elif filter_type == 'interval-max-input':
-                filters.append(f'{column} <= {filter_value}')
+                if len(param['checklist-exclude']) > 0:
+                    filters.append(statement)
+                else:
+                    filters.append(f'({statement} OR {column} IS NULL)')
 
             elif filter_type == 'min-input':
                 filter_value = f"'{filter_value}'"

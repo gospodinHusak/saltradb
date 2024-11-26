@@ -8,6 +8,12 @@ h2 {
     text-align: center;
 }
 
+ul {
+    text-align: justify;
+    padding-left: 100px;
+    padding-right: 50px;
+}
+
 p {
     text-align: justify;
     padding-left: 50px;
@@ -15,7 +21,19 @@ p {
 }
 
 h3 {
-    text-align: center;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+h4 {
+    padding-left: 100px;
+    padding-right: 50px;
+}
+
+ol {
+    text-align: justify;
+    padding-left: 150px;
+    padding-right: 50px;
 }
 
 
@@ -78,6 +96,16 @@ h3 {
     background-position: center; 
 }
 
+#why-pgsql {
+    padding-top: 20px;
+}
+
+#about-db-page {
+    background-image: url("/assets/home_background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; 
+}
 
 #nav-cards-container {
     display: flex; 
@@ -94,9 +122,12 @@ h3 {
     margin-right: auto;
     width: 1100px;
     height: calc(100vh - 40px);
-    background-color: rgba(255, 255, 255, 0.85);
+    background-color: rgba(255, 250, 240, 0.85);
     backdrop-filter: blur(6px);
-    box-shadow: 0px 20px 20px rgba(249, 246, 241, .9)
+    box-shadow: 0px 20px 20px rgba(249, 246, 241, .9);
+    overflow-y: auto;
+    scrollbar-color :rgb(35, 49, 63) rgba(255, 255, 255, 0);
+    background-color: rgba(255, 250, 240, 0.85);
 }
 
 .config-row {
@@ -115,3 +146,4 @@ h3 {
     max-height: calc(100vh - 90px);
     overflow-y: auto;
 }
+

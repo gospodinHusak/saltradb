@@ -65,14 +65,15 @@ table_placeholder = html.Div(
 navbar = dbc.NavbarSimple(
     children=[
         dbc.NavItem(dbc.NavLink("На главную", href="/")),
+        html.Div(style={'borderLeft': '1px solid gray', 'height': '20px', 'margin': '10px 10px'}),
         dbc.DropdownMenu(
             children=[
-                dbc.DropdownMenuItem("Другие страницы", header=True),
-                dbc.DropdownMenuItem("Методология", href="#"),
-                dbc.DropdownMenuItem("О базе данных", href="#"),
+                dbc.DropdownMenuItem("Визуализации", href="/charts"),
+                dbc.DropdownMenuItem("О базе данных", href="/about-db"),
             ],
             nav=True,
             in_navbar=True,
+            align_end=True,
             label="Другие страницы",
         )
     ],
@@ -274,6 +275,7 @@ layout = dbc.Container(
         dcc.Download(id="download-data"),
         dcc.Store(id='filters-store'),
         dcc.Store(id='view-columns-store'),
+        dcc.Store(id='orders-options-store'),
         dcc.Store(id='where-statement-store'),
         dcc.Store(id='retrieved-data'),
         download_popover,

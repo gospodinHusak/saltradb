@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 from pages.home.layout import layout as home
 from pages.charts.layout import layout as charts
 from pages.table_constructor.layout import layout as table_constructor
+from pages.about_db.layout import layout as about_db
 
 
 app = Dash(
@@ -11,6 +12,10 @@ app = Dash(
     external_stylesheets=[dbc.themes.FLATLY],
     meta_tags=[{'name': 'viewport', 'content': 'width=device-width, initial-scale=1.0'}]
 )
+
+app.title = 'Salt Trade DB'
+app._favicon = "logo.png"
+
 app.config.suppress_callback_exceptions=True
 
 app.layout = html.Div(
@@ -24,7 +29,8 @@ app.layout = html.Div(
 PAGES = {
     '/': home,
     '/charts': charts,
-    '/table-constructor': table_constructor
+    '/table-constructor': table_constructor,
+    '/about-db': about_db
 }
 
 @app.callback(Output('page-content', 'children'),

@@ -44,44 +44,67 @@ def interval(cur, vw_name, title) -> dbc.AccordionItem:
 
     min_value, max_value = cur.fetchone()
 
-    min_value = floor(min_value)
-    max_value = ceil(max_value)
+    # min_value = floor(min_value)
+    # max_value = ceil(max_value)
+    min_value = 0
+    max_value = max_value*100
 
     component = html.Div(
         [
-            dcc.Input(
-                id={
-                    'index': title,
-                    'type' : 'interval-min-input'
-                },
-                type='number',
-                value=min_value,
-                className='interval-input'
+            html.Div(
+                [
+                    dcc.Input(
+                        id={
+                            'index': title,
+                            'type' : 'interval-min-input'
+                        },
+                        type='number',
+                        value=min_value,
+                        className='interval-input'
+                    ),
+                    dcc.RangeSlider(
+                        id={
+                            'index': title,
+                            'type' : 'interval-slider'
+                        },
+                        marks=None,
+                        min=min_value,
+                        max=max_value,
+                        value=[min_value, max_value],
+                        allowCross=False,
+                        updatemode='drag',
+                        className='interval-slider'
+                    ),
+                    dcc.Input(
+                        id={
+                            'index': title,
+                            'type' : 'interval-max-input'
+                        },
+                        type='number',
+                        value=max_value,
+                        className='interval-input'
+                    ),
+                ],
+                className='interval-components'
             ),
-            dcc.RangeSlider(
-                id={
-                    'index': title,
-                    'type' : 'interval-slider'
-                },
-                marks=None,
-                min=min_value,
-                max=max_value,
-                value=[min_value, max_value],
-                allowCross=False,
-                updatemode='drag',
-                className='interval-slider'
-            ),
-            dcc.Input(
-                id={
-                    'index': title,
-                    'type' : 'interval-max-input'
-                },
-                type='number',
-                value=max_value,
-                className='interval-input'
-            ),
-        ],
-        className='interval-components'
+            html.Div(
+                dbc.Checklist(
+                    id={
+                        'index': title,
+                        'type' : 'checklist-exclude'
+                    },
+
+                    options=[
+                        {"label": "Исключить, если отсутствует значение", "value": "exclude_null"}
+                    ],
+                    value=[],
+                    persistence=True,
+                    persistence_type="session", 
+                    class_name='filter'
+                ),
+                style={'margin-top': '2px'}
+            )
+        ]
     )
 
     return dbc.AccordionItem(
@@ -299,14 +322,16 @@ def metric_row(num, cols, column_value=None, method_value=None):
                     'index': num
                 },
                 options=[
-                    {"label": "SUM", "value": "sum"},
-                    {"label": "AVG", "value": "avg"},
-                    {"label": "MAX", "value": "max"},
-                    {"label": "MIN", "value": "min"},
+                    {"label": "sum", "value": "sum"},
+                    {"label": "avg", "value": "avg"},
+                    {"label": "max", "value": "max"},
+                    {"label": "min", "value": "min"},
+                    {"label": "count", "value": "count"},
                 ],
                 value=method_value,
                 multi=False,
                 placeholder="Метод",
+                clearable=False,
                 className='required' if not method_value else '',
                 style={
                     'flex': '1', 
@@ -319,7 +344,7 @@ def metric_row(num, cols, column_value=None, method_value=None):
     )
 
 
-def order_row(num, column_value=None, method_value=None):
+def order_row(num, cols=None, column_value=None, method_value=None):
     return html.Div(
         id={
             'type': 'orders-row',
@@ -331,7 +356,7 @@ def order_row(num, column_value=None, method_value=None):
                     'type': 'orders-dropdown',
                     'index': num
                 },
-                options=column_value if column_value else [],
+                options=[{'label': i, 'value': i} for i in cols] if cols else [],
                 value=column_value,
                 multi=False,
                 placeholder="Поле",
@@ -350,6 +375,7 @@ def order_row(num, column_value=None, method_value=None):
                     {"label": "DESC", "value": "DESC"},
                 ],
                 value=method_value,
+                clearable=False,
                 multi=False,
                 placeholder="Порядок",
                 style={
