@@ -3,6 +3,7 @@ import dash_bootstrap_components as dbc
 
 from pages.home.layout import layout as home
 from pages.charts.layout import layout as charts
+from pages.sources.layout import layout as sources
 from pages.table_constructor.layout import layout as table_constructor
 from pages.about_db.layout import layout as about_db
 
@@ -28,6 +29,7 @@ app.layout = html.Div(
 
 PAGES = {
     '/': home,
+    '/sources': sources,
     '/charts': charts,
     '/table-constructor': table_constructor,
     '/about-db': about_db

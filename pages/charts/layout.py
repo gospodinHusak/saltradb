@@ -59,6 +59,7 @@ navbar = dbc.NavbarSimple(
         dbc.DropdownMenu(
             children=[
                 dbc.DropdownMenuItem("О базе данных", href="/about-db"),
+                dbc.DropdownMenuItem("Источники", href="/sources"),
                 dbc.DropdownMenuItem("Контруктор таблиц", href="/table-constructor"),
             ],
             nav=True,

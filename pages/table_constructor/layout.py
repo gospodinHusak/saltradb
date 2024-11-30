@@ -68,8 +68,9 @@ navbar = dbc.NavbarSimple(
         html.Div(style={'borderLeft': '1px solid gray', 'height': '20px', 'margin': '10px 10px'}),
         dbc.DropdownMenu(
             children=[
-                dbc.DropdownMenuItem("Визуализации", href="/charts"),
                 dbc.DropdownMenuItem("О базе данных", href="/about-db"),
+                dbc.DropdownMenuItem("Источники", href="/sources"),
+                dbc.DropdownMenuItem("Визуализации", href="/charts"),
             ],
             nav=True,
             in_navbar=True,

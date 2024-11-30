@@ -36,6 +36,12 @@ ol {
     padding-right: 50px;
 }
 
+#sources-list {
+    text-align: start !important;
+    padding-left: 50px !important;
+    padding-top: 25px;
+}
+
 
 .nav-card {
     width: 450px; 
@@ -101,6 +107,13 @@ ol {
 }
 
 #about-db-page {
+    background-image: url("/assets/home_background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center; 
+}
+
+#sources-page {
     background-image: url("/assets/home_background.png");
     background-repeat: no-repeat;
     background-size: cover;

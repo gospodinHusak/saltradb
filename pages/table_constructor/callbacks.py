@@ -51,7 +51,7 @@ def update_cols(*args):
         '''
     )
 
-    cols = [i[0] for i in cur.fetchall()]
+    cols = sorted([i[0] for i in cur.fetchall()])
 
     conn.close()
     cur.close()
