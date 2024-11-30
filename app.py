@@ -15,7 +15,7 @@ app = Dash(
 )
 
 app.title = 'Salt Trade DB'
-app._favicon = "logo.png"
+app._favicon = "sol-ikonka.ico"
 
 app.config.suppress_callback_exceptions=True
 
